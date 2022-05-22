@@ -1,0 +1,142 @@
+#!/bin/bash
+
+# utility for deleting/moving directory contents
+# GNU Affero General Public License v3.0
+
+
+options=("remove" "remove except" "move" "move except" "ls" "exit")
+
+# removes selected item from directory
+remove_item() {
+		clear
+		ls
+		echo -e ""
+		echo "remove all equal to..."
+		echo -e ""
+		echo "[ CAUTION: empty filename argument will clear directory ]"
+		read -p "filename: " filename
+		clear
+		for file in *
+		do
+				if [[ "$file" == *"$filename"* ]]
+				then
+						rm -ivr "$file"
+				fi
+		done
+		echo -e ""
+		read -p "press enter..."
+}
+
+# removes all items except selected item from directory
+remove_ex_item() {
+		clear
+		ls
+		echo -e ""
+		echo "remove all except..."
+		echo -e ""
+		echo "[ CAUTION: empty filename argument will clear directory ]"
+		read -p "filename: " filename
+		clear
+		for file in *
+		do
+				if [[ "$file" != *"$filename"* ]]
+				then
+						rm -ivr "$file"
+				fi
+		done
+		echo -e ""
+		read -p "press enter..."
+}
+
+# moves selected item to a new directory
+move_item() {
+		clear
+		ls
+		echo -e ""
+		echo "move all except..."
+		echo -e ""
+		read -p "filename: " filename
+		read -p "move to: " move_to
+		mkdir -p $move_to
+		clear
+		for file in *
+		do
+				if [[ "$file" == *"$filename"* ]]
+				then
+						echo "$file will be moved to $move_to"
+						mv "$file" "$move_to"
+				fi
+		done
+		echo -e ""
+		read -p "press enter..."
+}
+# move all items except for selected item to a new directory
+move_ex_item() {
+		clear
+		ls
+		echo -e ""
+		echo "move all equal to..."
+		echo -e ""
+		read -p "filename: " filename
+		read -p "move to: " move_to
+		mkdir -p $move_to
+		clear
+		for file in *
+		do
+				if [[ "$file" == *"$filename"* ]]
+				then
+						echo "$file will be moved to $move_to"
+						mv "$file" "$move_to"
+				fi
+		done
+		echo -e ""
+		read -p "press enter..."
+}
+
+menu() {
+		while true
+		do
+				clear
+				count=1
+				echo -e "\n\n\n\n\n\n\n\n\n\n"
+				for option in "${options[@]}"
+				do
+						echo -e "$count. $option"
+						(( count+=1 ))
+				done
+				echo -e ""
+				read -p "selection: " selection
+				case $selection in
+						"1")
+								remove_item
+								;;
+						"2")
+								remove_ex_item
+								;;
+						"3")
+								move_item
+								;;
+						"4")
+								move_ex_item
+								;;
+						"5")
+								echo -e ""
+								ls --color=auto
+								echo -e ""
+								read -p "press enter..."
+								echo -e ""
+								;;
+						"6")
+								clear
+								break
+								;;
+						"*")
+								echo "invalid entry..."
+								;;
+				esac
+		done
+
+
+}
+
+menu
